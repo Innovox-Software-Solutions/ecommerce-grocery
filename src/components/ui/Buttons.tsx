@@ -56,7 +56,6 @@ export const SecondaryButton = ({ children, onClick }: ButtonProps) => {
   return (
     <motion.button
       onClick={onClick}
-      whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       style={{
         padding: '12px 32px',
@@ -72,6 +71,10 @@ export const SecondaryButton = ({ children, onClick }: ButtonProps) => {
       }}
       initial="initial"
       whileHover="hover"
+      variants={{
+        initial: { scale: 1 },
+        hover: { scale: 1.05 }
+      }}
     >
       <motion.div
         variants={{
