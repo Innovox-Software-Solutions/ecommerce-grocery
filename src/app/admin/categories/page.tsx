@@ -1,30 +1,17 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Plus, 
-  Search, 
-  MoreHorizontal, 
-  Edit2, 
-  Trash2, 
-  ChevronRight,
-  Filter,
-  Download,
-  Eye,
-  Layers,
-  ArrowUpDown
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
+import React, { useState } from 'react';
+import { Plus, Search, Edit2, Trash2, ChevronRight, Filter, Download, Layers } from 'lucide-react';
 
 const INITIAL_CATEGORIES = [
-  { id: 1, name: 'Vegetables', count: 45, status: 'Active', color: 'bg-emerald-500/10 text-emerald-600', icon: 'Leaf' },
-  { id: 2, name: 'Fruits', count: 32, status: 'Active', color: 'bg-rose-500/10 text-rose-600', icon: 'Apple' },
-  { id: 3, name: 'Dairy', count: 28, status: 'Active', color: 'bg-sky-500/10 text-sky-600', icon: 'Milk' },
-  { id: 4, name: 'Meat', count: 15, status: 'Active', color: 'bg-amber-500/10 text-amber-600', icon: 'Beef' },
-  { id: 5, name: 'Bakery', count: 22, status: 'Active', color: 'bg-indigo-500/10 text-indigo-600', icon: 'Fish' },
-  { id: 6, name: 'Beauty', count: 56, status: 'Active', color: 'bg-pink-500/10 text-pink-600', icon: 'Sparkles' },
-  { id: 7, name: 'Wellness', count: 18, status: 'Inactive', color: 'bg-slate-500/10 text-slate-600', icon: 'Pill' },
+  { id: 1, name: 'Vegetables', count: 45, status: 'Active', color: '#10B981' },
+  { id: 2, name: 'Fruits', count: 32, status: 'Active', color: '#F43F5E' },
+  { id: 3, name: 'Dairy', count: 28, status: 'Active', color: '#0EA5E9' },
+  { id: 4, name: 'Meat', count: 15, status: 'Active', color: '#F59E0B' },
+  { id: 5, name: 'Bakery', count: 22, status: 'Active', color: '#6366F1' },
+  { id: 6, name: 'Beauty', count: 56, status: 'Active', color: '#EC4899' },
+  { id: 7, name: 'Wellness', count: 18, status: 'Inactive', color: '#94A3B8' },
+  { id: 8, name: 'Baby Care', count: 12, status: 'Active', color: '#F97316' },
 ];
 
 export default function CategoriesPage() {
@@ -36,104 +23,139 @@ export default function CategoriesPage() {
   );
 
   return (
-    <div className="space-y-8">
+    <div>
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <h1 className="text-3xl font-black text-brand tracking-tight font-heading">Product Categories</h1>
-          <p className="text-slate-500 font-medium">Manage and organize your product catalog collections.</p>
+          <h1 style={{ fontSize: '1.8rem', fontWeight: '900', color: 'var(--primary)', marginBottom: '8px' }}>Product Categories</h1>
+          <p style={{ color: 'var(--text-muted)', fontWeight: '500' }}>Manage and organize your product catalog collections.</p>
         </div>
-        <div className="flex items-center gap-3">
-          <button className="h-12 px-6 bg-brand/5 text-brand rounded-xl font-bold flex items-center gap-2 hover:bg-brand/10 transition-all">
-            <Download size={18} />
-            Export
+        <div style={{ display: 'flex', gap: '12px' }}>
+          <button style={{ 
+            height: '48px', padding: '0 24px', background: 'rgba(27,67,50,0.05)', color: 'var(--primary)',
+            borderRadius: '14px', fontWeight: '700', border: 'none', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px'
+          }}>
+            <Download size={18} /> Export
           </button>
-          <button className="h-12 px-6 bg-brand text-white rounded-xl font-bold flex items-center gap-2 hover:bg-brand-light transition-all shadow-lg shadow-brand/20">
-            <Plus size={18} />
-            New Category
+          <button style={{ 
+            height: '48px', padding: '0 24px', background: 'var(--primary)', color: 'white',
+            borderRadius: '14px', fontWeight: '700', border: 'none', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px',
+            boxShadow: '0 4px 14px rgba(27,67,50,0.3)'
+          }}>
+            <Plus size={18} /> New Category
           </button>
         </div>
       </div>
 
-      {/* Filters & Search */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-4 shadow-sm border border-slate-100 dark:border-white/5 flex flex-col md:flex-row gap-4 items-center">
-        <div className="relative flex-1 w-full">
-          <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+      {/* Search */}
+      <div style={{ 
+        background: 'white', borderRadius: '20px', padding: '16px', marginBottom: '32px',
+        boxShadow: 'var(--shadow-sm)', border: '1px solid #F1F5F9',
+        display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap'
+      }}>
+        <div style={{ flex: 1, position: 'relative', minWidth: '200px' }}>
+          <Search size={16} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
           <input 
-            type="text" 
-            placeholder="Search categories..." 
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none text-sm font-medium focus:ring-2 focus:ring-brand/20 transition-all"
+            type="text" placeholder="Search categories..." 
+            value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
+            style={{ 
+              width: '100%', padding: '12px 16px 12px 44px', background: '#F8FAFC', 
+              border: 'none', borderRadius: '14px', outline: 'none', fontSize: '14px', fontWeight: '500' 
+            }}
           />
         </div>
-        <div className="flex items-center gap-2 w-full md:w-auto">
-          <button className="h-12 px-4 bg-slate-50 dark:bg-slate-800 rounded-2xl text-slate-500 hover:text-brand transition-all flex items-center gap-2 font-bold text-sm">
-            <Filter size={18} />
-            Filters
-          </button>
-          <button className="h-12 px-4 bg-slate-50 dark:bg-slate-800 rounded-2xl text-slate-500 hover:text-brand transition-all flex items-center gap-2 font-bold text-sm">
-            <ArrowUpDown size={18} />
-            Sort
-          </button>
-        </div>
+        <button style={{ 
+          height: '44px', padding: '0 20px', background: '#F8FAFC', borderRadius: '14px',
+          border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px',
+          color: '#64748B', fontWeight: '600', fontSize: '13px'
+        }}>
+          <Filter size={16} /> Filters
+        </button>
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        <AnimatePresence mode="popLayout">
-          {filteredCategories.map((cat) => (
-            <motion.div
-              layout
-              key={cat.id}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              className="bg-white dark:bg-slate-900 rounded-[32px] p-6 shadow-sm border border-slate-100 dark:border-white/5 group hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-            >
-              <div className="flex items-start justify-between mb-6">
-                <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center transition-transform group-hover:rotate-6", cat.color)}>
-                  <Layers size={28} />
-                </div>
-                <div className="flex gap-2">
-                  <button className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 transition-colors">
-                    <Edit2 size={16} />
-                  </button>
-                  <button className="p-2 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg text-slate-400 hover:text-rose-500 transition-colors">
-                    <Trash2 size={16} />
-                  </button>
-                </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '24px' }}>
+        {filteredCategories.map((cat) => (
+          <div key={cat.id} style={{ 
+            background: 'white', borderRadius: '24px', padding: '28px',
+            boxShadow: 'var(--shadow-sm)', border: '1px solid #F1F5F9',
+            transition: 'var(--transition)', cursor: 'pointer'
+          }} className="cat-card">
+            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '24px' }}>
+              <div style={{ 
+                width: '56px', height: '56px', borderRadius: '18px', 
+                background: `${cat.color}15`, color: cat.color,
+                display: 'flex', alignItems: 'center', justifyContent: 'center'
+              }}>
+                <Layers size={28} />
               </div>
-
-              <div className="space-y-1">
-                <h3 className="text-xl font-black text-brand dark:text-white tracking-tight">{cat.name}</h3>
-                <p className="text-sm text-slate-400 font-bold uppercase tracking-widest">{cat.count} Products</p>
-              </div>
-
-              <div className="mt-6 pt-6 border-t border-slate-50 dark:border-white/5 flex items-center justify-between">
-                <span className={cn(
-                  "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest",
-                  cat.status === 'Active' ? "bg-emerald-500/10 text-emerald-600" : "bg-slate-100 text-slate-400"
-                )}>
-                  {cat.status}
-                </span>
-                <button className="text-brand dark:text-brand-light text-sm font-black flex items-center gap-1 group/btn">
-                  View List
-                  <ChevronRight size={14} className="transition-transform group-hover/btn:translate-x-1" />
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button style={{ 
+                  padding: '8px', borderRadius: '10px', border: 'none', background: '#F8FAFC',
+                  cursor: 'pointer', color: '#94A3B8', transition: 'var(--transition)'
+                }}>
+                  <Edit2 size={16} />
+                </button>
+                <button style={{ 
+                  padding: '8px', borderRadius: '10px', border: 'none', background: '#FEF2F2',
+                  cursor: 'pointer', color: '#F87171', transition: 'var(--transition)'
+                }}>
+                  <Trash2 size={16} />
                 </button>
               </div>
-            </motion.div>
-          ))}
-        </AnimatePresence>
+            </div>
+
+            <h3 style={{ fontSize: '1.2rem', fontWeight: '900', color: 'var(--primary)', marginBottom: '4px' }}>{cat.name}</h3>
+            <p style={{ fontSize: '12px', color: '#94A3B8', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1.5px' }}>{cat.count} Products</p>
+
+            <div style={{ 
+              marginTop: '24px', paddingTop: '24px', borderTop: '1px solid #F8FAFC',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between'
+            }}>
+              <span style={{ 
+                padding: '4px 14px', borderRadius: '20px', fontSize: '11px', fontWeight: '800',
+                textTransform: 'uppercase', letterSpacing: '1px',
+                background: cat.status === 'Active' ? '#ECFDF5' : '#F1F5F9',
+                color: cat.status === 'Active' ? '#059669' : '#94A3B8'
+              }}>
+                {cat.status}
+              </span>
+              <button style={{ 
+                border: 'none', background: 'none', cursor: 'pointer',
+                color: 'var(--primary)', fontWeight: '800', fontSize: '13px',
+                display: 'flex', alignItems: 'center', gap: '4px'
+              }}>
+                View <ChevronRight size={14} />
+              </button>
+            </div>
+          </div>
+        ))}
 
         {/* Add New Card */}
-        <button className="group h-full min-h-[220px] rounded-[32px] border-2 border-dashed border-slate-200 dark:border-white/10 flex flex-col items-center justify-center gap-4 hover:border-brand hover:bg-brand/5 transition-all">
-          <div className="w-14 h-14 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:bg-brand group-hover:text-white transition-all">
-            <Plus size={32} />
+        <div style={{ 
+          minHeight: '220px', borderRadius: '24px', 
+          border: '2px dashed #E2E8F0', 
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', 
+          gap: '16px', cursor: 'pointer', transition: 'var(--transition)'
+        }} className="cat-card">
+          <div style={{ 
+            width: '56px', height: '56px', borderRadius: '50%', background: '#F8FAFC',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94A3B8'
+          }}>
+            <Plus size={28} />
           </div>
-          <span className="font-black text-brand dark:text-white uppercase tracking-widest text-sm">Create New</span>
-        </button>
+          <span style={{ fontWeight: '800', color: 'var(--primary)', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1.5px' }}>Create New</span>
+        </div>
       </div>
+
+      <style jsx>{`
+        .cat-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+        }
+      `}</style>
     </div>
   );
 }

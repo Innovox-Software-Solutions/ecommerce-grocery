@@ -1,110 +1,105 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Search, Filter, Download, Mail, Phone, MoreVertical, UserCheck, UserMinus, Shield } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Search, Filter, Download, Mail, Phone, MoreVertical } from 'lucide-react';
 
 const CUSTOMERS = [
   { id: 1, name: 'Sahil Hode', email: 'sahil@example.com', phone: '+91 98765 43210', orders: 12, totalSpent: '₹12,450', status: 'Active', joined: '12 Jan 2026' },
   { id: 2, name: 'John Doe', email: 'john@example.com', phone: '+91 91234 56789', orders: 5, totalSpent: '₹4,200', status: 'Active', joined: '05 Feb 2026' },
   { id: 3, name: 'Jane Smith', email: 'jane@example.com', phone: '+91 99887 76655', orders: 28, totalSpent: '₹35,600', status: 'Premium', joined: '20 Dec 2025' },
   { id: 4, name: 'Rahul Kumar', email: 'rahul@example.com', phone: '+91 90000 11111', orders: 0, totalSpent: '₹0', status: 'Inactive', joined: '15 Apr 2026' },
+  { id: 5, name: 'Priya Sharma', email: 'priya@example.com', phone: '+91 88776 55443', orders: 18, totalSpent: '₹22,100', status: 'Active', joined: '03 Mar 2026' },
 ];
 
 export default function CustomersPage() {
   const [searchTerm, setSearchTerm] = useState('');
 
+  const filtered = CUSTOMERS.filter(c => c.name.toLowerCase().includes(searchTerm.toLowerCase()));
+
+  const statusStyle = (status: string) => ({
+    padding: '4px 14px', borderRadius: '20px', fontSize: '11px', fontWeight: '800' as const,
+    textTransform: 'uppercase' as const, letterSpacing: '1px',
+    background: status === 'Premium' ? 'var(--primary)' : status === 'Active' ? '#ECFDF5' : '#F1F5F9',
+    color: status === 'Premium' ? 'white' : status === 'Active' ? '#059669' : '#94A3B8',
+  });
+
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <h1 className="text-3xl font-black text-brand tracking-tight font-heading">Customer Management</h1>
-          <p className="text-slate-500 font-medium">View and manage your registered user base.</p>
+          <h1 style={{ fontSize: '1.8rem', fontWeight: '900', color: 'var(--primary)', marginBottom: '8px' }}>Customer Management</h1>
+          <p style={{ color: 'var(--text-muted)', fontWeight: '500' }}>View and manage your registered user base.</p>
         </div>
-        <div className="flex items-center gap-3">
-          <button className="h-12 px-6 bg-brand/5 text-brand rounded-xl font-bold flex items-center gap-2 hover:bg-brand/10 transition-all">
-            <Download size={18} />
-            Export CSV
-          </button>
-        </div>
+        <button style={{ 
+          height: '48px', padding: '0 24px', background: 'rgba(27,67,50,0.05)', color: 'var(--primary)',
+          borderRadius: '14px', fontWeight: '700', border: 'none', cursor: 'pointer',
+          display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px'
+        }}>
+          <Download size={18} /> Export CSV
+        </button>
       </div>
 
-      <div className="bg-white dark:bg-slate-900 rounded-[32px] overflow-hidden shadow-sm border border-slate-100 dark:border-white/5">
-        <div className="p-6 border-b border-slate-100 dark:border-white/5 flex flex-col md:flex-row gap-4 items-center justify-between">
-          <div className="relative w-full md:w-96">
-            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+      <div style={{ background: 'white', borderRadius: '24px', overflow: 'hidden', boxShadow: 'var(--shadow-sm)', border: '1px solid #F1F5F9' }}>
+        {/* Search */}
+        <div style={{ padding: '24px', borderBottom: '1px solid #F1F5F9', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+          <div style={{ flex: 1, position: 'relative', minWidth: '200px' }}>
+            <Search size={16} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
             <input 
-              type="text" 
-              placeholder="Search customers..." 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl outline-none text-sm font-medium focus:ring-2 focus:ring-brand/20 transition-all"
+              type="text" placeholder="Search customers..." 
+              value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
+              style={{ width: '100%', padding: '12px 16px 12px 44px', background: '#F8FAFC', border: 'none', borderRadius: '14px', outline: 'none', fontSize: '14px', fontWeight: '500' }}
             />
           </div>
-          <button className="h-12 px-6 bg-slate-50 dark:bg-slate-800 rounded-2xl text-slate-500 hover:text-brand transition-all flex items-center gap-2 font-bold text-sm">
-            <Filter size={18} />
-            Advanced Filters
+          <button style={{ height: '44px', padding: '0 20px', background: '#F8FAFC', borderRadius: '14px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', color: '#64748B', fontWeight: '600', fontSize: '13px' }}>
+            <Filter size={16} /> Filters
           </button>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left">
+        {/* Table */}
+        <div style={{ overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
             <thead>
-              <tr className="bg-slate-50/50 dark:bg-slate-800/50 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 border-b border-slate-100 dark:border-white/5">
-                <th className="px-8 py-6">Customer</th>
-                <th className="px-8 py-6">Contact</th>
-                <th className="px-8 py-6">Activity</th>
-                <th className="px-8 py-6">Status</th>
-                <th className="px-8 py-6">Joined</th>
-                <th className="px-8 py-6 text-right">Actions</th>
+              <tr style={{ background: '#FAFBFC', fontSize: '11px', fontWeight: '800', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '1.5px' }}>
+                <th style={{ padding: '18px 24px' }}>Customer</th>
+                <th style={{ padding: '18px 24px' }}>Contact</th>
+                <th style={{ padding: '18px 24px' }}>Activity</th>
+                <th style={{ padding: '18px 24px' }}>Status</th>
+                <th style={{ padding: '18px 24px' }}>Joined</th>
+                <th style={{ padding: '18px 24px', textAlign: 'right' }}>Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-50 dark:divide-white/5">
-              {CUSTOMERS.map((customer) => (
-                <tr key={customer.id} className="group hover:bg-slate-50/30 dark:hover:bg-white/[0.02] transition-colors">
-                  <td className="px-8 py-6">
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-xl bg-brand/10 text-brand flex items-center justify-center font-black">
+            <tbody>
+              {filtered.map((customer) => (
+                <tr key={customer.id} className="table-row" style={{ borderTop: '1px solid #F8FAFC', transition: 'var(--transition)' }}>
+                  <td style={{ padding: '20px 24px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                      <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(27,67,50,0.08)', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900', fontSize: '16px' }}>
                         {customer.name.charAt(0)}
                       </div>
                       <div>
-                        <p className="font-black text-brand dark:text-white text-sm">{customer.name}</p>
-                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">ID: #{customer.id}293</p>
+                        <p style={{ fontWeight: '800', color: 'var(--primary)', fontSize: '14px' }}>{customer.name}</p>
+                        <p style={{ fontSize: '11px', color: '#94A3B8', fontWeight: '600' }}>ID: #{customer.id}293</p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-8 py-6">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
-                        <Mail size={12} /> {customer.email}
-                      </div>
-                      <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
-                        <Phone size={12} /> {customer.phone}
-                      </div>
+                  <td style={{ padding: '20px 24px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                      <span style={{ fontSize: '13px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '6px' }}><Mail size={12} /> {customer.email}</span>
+                      <span style={{ fontSize: '13px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '6px' }}><Phone size={12} /> {customer.phone}</span>
                     </div>
                   </td>
-                  <td className="px-8 py-6">
-                    <div className="space-y-1">
-                      <p className="font-black text-brand dark:text-white text-sm">{customer.orders} Orders</p>
-                      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Spent: {customer.totalSpent}</p>
-                    </div>
+                  <td style={{ padding: '20px 24px' }}>
+                    <p style={{ fontWeight: '800', color: 'var(--primary)', fontSize: '14px' }}>{customer.orders} Orders</p>
+                    <p style={{ fontSize: '11px', color: '#94A3B8', fontWeight: '600' }}>Spent: {customer.totalSpent}</p>
                   </td>
-                  <td className="px-8 py-6">
-                    <span className={cn(
-                      "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest",
-                      customer.status === 'Premium' ? "bg-brand text-white" :
-                      customer.status === 'Active' ? "bg-emerald-500/10 text-emerald-600" :
-                      "bg-slate-100 text-slate-400"
-                    )}>
-                      {customer.status}
-                    </span>
+                  <td style={{ padding: '20px 24px' }}>
+                    <span style={statusStyle(customer.status)}>{customer.status}</span>
                   </td>
-                  <td className="px-8 py-6 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                  <td style={{ padding: '20px 24px', fontSize: '13px', color: '#94A3B8', fontWeight: '600' }}>
                     {customer.joined}
                   </td>
-                  <td className="px-8 py-6 text-right">
-                    <button className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 transition-colors">
+                  <td style={{ padding: '20px 24px', textAlign: 'right' }}>
+                    <button style={{ padding: '8px', borderRadius: '10px', border: 'none', background: '#F8FAFC', cursor: 'pointer', color: '#94A3B8' }}>
                       <MoreVertical size={18} />
                     </button>
                   </td>
@@ -114,6 +109,10 @@ export default function CustomersPage() {
           </table>
         </div>
       </div>
+
+      <style jsx>{`
+        .table-row:hover { background: #FAFBFC; }
+      `}</style>
     </div>
   );
 }
