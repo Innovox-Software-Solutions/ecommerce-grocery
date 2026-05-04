@@ -52,7 +52,7 @@ export default function DesignSystemShowcase() {
         {/* Product Cards Row */}
         <div style={{ marginBottom: '40px' }}>
           <h3 style={{ fontSize: '1.5rem', marginBottom: '30px' }}>Product Card System (Scrollable)</h3>
-          <ProductRow />
+          <ProductRow title="Design System Showcase" />
         </div>
       </div>
     </section>

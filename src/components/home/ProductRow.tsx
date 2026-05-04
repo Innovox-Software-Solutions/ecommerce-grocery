@@ -4,10 +4,10 @@ import React from 'react';
 import ProductCard from '../ui/ProductCard';
 
 const PRODUCTS = [
-  { id: 101, name: 'Fresh Red Tomato', weight: '500g', price: 45, originalPrice: 60, image: '/images/tomato.png', rating: 4.8, bgColor: '#EAE3D2' },
-  { id: 102, name: 'Organic Cabbage', weight: '1kg', price: 35, originalPrice: 50, image: '/images/cabbage.png', rating: 4.5, bgColor: '#D8E2DC' },
-  { id: 103, name: 'Fresh Cauliflower', weight: '1pc', price: 40, originalPrice: 55, image: '/images/cauliflower.png', rating: 4.7, bgColor: '#E9EDC9' },
-  { id: 104, name: 'Red Chili', weight: '200g', price: 25, originalPrice: 35, image: '/images/chili.png', rating: 4.9, bgColor: '#F0EAD6' },
+  { id: 101, name: 'Fresh Red Tomato', weight: '500g', price: 45, originalPrice: 60, image: '/images/tomato.png', rating: 4.8, bgColor: '#EAE3D2', category: 'Organic Veg' },
+  { id: 102, name: 'Organic Cabbage', weight: '1kg', price: 35, originalPrice: 50, image: '/images/cabbage.png', rating: 4.5, bgColor: '#D8E2DC', category: 'Organic Veg' },
+  { id: 103, name: 'Fresh Cauliflower', weight: '1pc', price: 40, originalPrice: 55, image: '/images/cauliflower.png', rating: 4.7, bgColor: '#E9EDC9', category: 'Organic Veg' },
+  { id: 104, name: 'Red Chili', weight: '200g', price: 25, originalPrice: 35, image: '/images/chili.png', rating: 4.9, bgColor: '#F0EAD6', category: 'Fresh Meat' },
 ];
 
 interface ProductRowProps {

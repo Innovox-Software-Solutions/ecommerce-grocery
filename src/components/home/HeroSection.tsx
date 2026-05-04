@@ -1,10 +1,18 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Search, MapPin, ShoppingBag, ArrowRight, Leaf, ChevronDown, User, Globe } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function HeroSection() {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearch = () => {
+    window.dispatchEvent(new CustomEvent('search-update', { detail: searchTerm }));
+    const productSection = document.getElementById('products');
+    if (productSection) productSection.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <section style={{ 
       position: 'relative', 
@@ -92,6 +100,9 @@ export default function HeroSection() {
               <input 
                 type="text" 
                 placeholder="Search fresh organic vegetables..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                 style={{ 
                   flex: 1, 
                   border: 'none', 
@@ -104,7 +115,9 @@ export default function HeroSection() {
               />
 
               {/* Button */}
-              <button style={{ 
+              <button 
+                onClick={handleSearch}
+                style={{ 
                 background: 'var(--primary)', 
                 color: 'white', 
                 border: 'none', 
@@ -121,7 +134,9 @@ export default function HeroSection() {
               </button>
             </div>
 
-            <button style={{ 
+            <button 
+              onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}
+              style={{ 
               background: 'none', 
               border: '2px solid var(--primary)', 
               color: 'var(--primary)', 

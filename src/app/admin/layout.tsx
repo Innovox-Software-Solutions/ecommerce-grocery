@@ -56,13 +56,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Sidebar */}
       <aside className={`admin-sidebar ${!isSidebarOpen ? 'closed' : ''}`} style={{ 
         width: '260px', 
-        backgroundColor: '#111827', 
-        color: '#9CA3AF', 
+        backgroundColor: 'var(--primary)', 
+        color: 'rgba(255,255,255,0.7)', 
         padding: '30px 20px',
         position: 'fixed',
         height: '100vh',
         transition: 'var(--transition)',
-        zIndex: '1000'
+        zIndex: '1000',
+        boxShadow: 'var(--shadow-lg)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '40px' }}>
           <div style={{ backgroundColor: 'var(--primary)', padding: '6px', borderRadius: '8px' }}>
@@ -72,7 +73,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
 
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {menuItems.map((item) > (
+          {menuItems.map((item) => (
             <Link 
               key={item.path} 
               href={item.path}

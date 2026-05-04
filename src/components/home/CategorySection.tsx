@@ -69,6 +69,10 @@ export default function CategorySection() {
             <motion.div
               key={idx}
               whileHover={{ y: -12, boxShadow: '0 20px 40px rgba(31, 61, 43, 0.1)' }}
+              onClick={() => {
+                window.dispatchEvent(new CustomEvent('category-update', { detail: cat.name }));
+                document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
+              }}
               style={{
                 flex: '0 0 auto',
                 width: '160px',

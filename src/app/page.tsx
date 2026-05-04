@@ -17,7 +17,7 @@ export default function Home() {
     <main>
       <Navbar />
       <HeroSection />
-      <ProductRow />
+      <ProductRow title="Featured Products" description="Handpicked organic goodness delivered straight to you" />
       <CategorySection />
       <PopularProductsSection />
       <BundlePackSection />

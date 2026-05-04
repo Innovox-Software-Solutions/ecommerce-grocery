@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Plus, Search, Edit2, Trash2, X } from 'lucide-react';
+import { motion } from 'framer-motion';
 import OptimizedImage from '@/components/ui/OptimizedImage';
 
 const mockProducts = [
@@ -62,7 +63,7 @@ export default function ProductManagement() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '15px', flexWrap: 'wrap' }}>
         <div>
-          <h1 style={{ fontSize: '1.8rem', color: 'var(--primary)', fontWeight: '900' }}>Product Management</h1>
+          <h1 style={{ fontSize: '1.8rem', color: 'var(--primary)', fontWeight: '900', fontFamily: 'var(--font-heading)' }}>Product Management</h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '14px', fontWeight: '500' }}>Manage your inventory, prices and product status.</p>
         </div>
         <button 

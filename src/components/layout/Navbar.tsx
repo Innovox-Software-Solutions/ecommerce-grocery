@@ -1,15 +1,22 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { ShoppingCart, Search, Menu, X, ShoppingBag, MapPin, User, LogOut, Package } from 'lucide-react';
+import { ShoppingCart, Search, Menu, X, ShoppingBag, MapPin, User, LogOut, Package, Trash2, Plus, Minus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
+  const [cartItems, setCartItems] = useState<any[]>([]);
   const [user, setUser] = useState<any>(null);
+
+  const cartCount = cartItems.reduce((acc, item) => acc + (item.quantity || 1), 0);
+  const cartTotal = cartItems.reduce((acc, item) => {
+    const price = typeof item.price === 'string' ? parseFloat(item.price.replace('₹', '')) : item.price;
+    return acc + (price * (item.quantity || 1));
+  }, 0);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 40);
@@ -17,7 +24,7 @@ export default function Navbar() {
     
     const updateCart = () => {
       const items = JSON.parse(localStorage.getItem('cart_store') || '[]');
-      setCartCount(items.reduce((acc: number, item: any) => acc + (item.quantity || 1), 0));
+      setCartItems(items);
     };
 
     const checkAuth = () => {
@@ -35,6 +42,20 @@ export default function Navbar() {
       window.removeEventListener('auth-change', checkAuth);
     };
   }, []);
+
+  const updateQuantity = (id: any, delta: number) => {
+    const newItems = cartItems.map(item => {
+      if (item.id === id) {
+        const newQty = Math.max(0, (item.quantity || 1) + delta);
+        return { ...item, quantity: newQty };
+      }
+      return item;
+    }).filter(item => item.quantity > 0);
+    
+    setCartItems(newItems);
+    localStorage.setItem('cart_store', JSON.stringify(newItems));
+    window.dispatchEvent(new Event('cart-update'));
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('user_logged_in');
@@ -106,10 +127,6 @@ export default function Navbar() {
             <div className="desktop-menu" style={{ 
               display: 'flex', 
               gap: '30px', 
-              background: isScrolled ? 'transparent' : 'white',
-              padding: isScrolled ? '0' : '10px 30px',
-              borderRadius: '100px',
-              boxShadow: isScrolled ? 'none' : 'var(--shadow-sm)',
               transition: 'all 0.4s'
             }}>
               {navLinks.map((link) => (
@@ -136,7 +153,7 @@ export default function Navbar() {
                 <Search size={20} />
               </button>
               
-              <div style={{ position: 'relative', cursor: 'pointer' }} className="desktop-menu">
+              <div style={{ position: 'relative', cursor: 'pointer' }} onClick={() => setIsCartOpen(true)}>
                 <div style={actionBtnStyle}>
                   <ShoppingCart size={20} />
                   {cartCount > 0 && (
@@ -198,6 +215,106 @@ export default function Navbar() {
           </div>
         </div>
       </header>
+
+      {/* Cart Drawer */}
+      <AnimatePresence>
+        {isCartOpen && (
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsCartOpen(false)}
+              style={{ position: 'fixed', inset: 0, background: 'rgba(27, 67, 50, 0.4)', backdropFilter: 'blur(10px)', zIndex: 2000 }}
+            />
+            <motion.div 
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              style={{ 
+                position: 'fixed', 
+                top: 0, 
+                right: 0, 
+                bottom: 0, 
+                width: 'min(450px, 90vw)', 
+                background: 'var(--bg-main)', 
+                zIndex: 2001, 
+                display: 'flex',
+                flexDirection: 'column'
+              }}
+            >
+              <div style={{ padding: '30px', borderBottom: '1px solid rgba(0,0,0,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: '900', color: 'var(--primary)', fontFamily: 'var(--font-heading)' }}>Your Basket ({cartCount})</h2>
+                <button onClick={() => setIsCartOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}><X size={24} /></button>
+              </div>
+
+              <div style={{ flex: 1, overflowY: 'auto', padding: '20px' }}>
+                {cartItems.length === 0 ? (
+                  <div style={{ textAlign: 'center', padding: '80px 0' }}>
+                    <div style={{ fontSize: '64px', marginBottom: '20px' }}>🛒</div>
+                    <h3 style={{ fontWeight: '800', marginBottom: '10px' }}>Your basket is empty</h3>
+                    <p style={{ color: 'var(--text-muted)' }}>Add some fresh organic items to get started!</p>
+                  </div>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                    {cartItems.map((item, idx) => (
+                      <div key={idx} style={{ 
+                        background: 'white', 
+                        padding: '15px', 
+                        borderRadius: '20px', 
+                        display: 'flex', 
+                        gap: '15px',
+                        alignItems: 'center',
+                        boxShadow: 'var(--shadow-sm)'
+                      }}>
+                        <div style={{ width: '60px', height: '60px', borderRadius: '12px', background: 'var(--bg-soft)', padding: '5px' }}>
+                          <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'contain', mixBlendMode: 'multiply' }} />
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <h4 style={{ fontWeight: '800', fontSize: '14px', marginBottom: '4px' }}>{item.name}</h4>
+                          <p style={{ fontWeight: '900', color: 'var(--primary)' }}>{item.price}</p>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'var(--bg-soft)', padding: '6px 12px', borderRadius: '12px' }}>
+                          <button onClick={() => updateQuantity(item.id, -1)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}><Minus size={14} /></button>
+                          <span style={{ fontWeight: '800', fontSize: '14px' }}>{item.quantity || 1}</span>
+                          <button onClick={() => updateQuantity(item.id, 1)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}><Plus size={14} /></button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {cartItems.length > 0 && (
+                <div style={{ padding: '30px', background: 'white', borderTop: '1px solid rgba(0,0,0,0.05)', borderRadius: '32px 32px 0 0', boxShadow: '0 -10px 30px rgba(0,0,0,0.05)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
+                    <span style={{ fontWeight: '700', color: 'var(--text-muted)' }}>Total Amount</span>
+                    <span style={{ fontWeight: '900', fontSize: '1.5rem', color: 'var(--primary)' }}>₹{cartTotal}</span>
+                  </div>
+                  <Link 
+                    href="/checkout" 
+                    onClick={() => setIsCartOpen(false)}
+                    style={{ 
+                      display: 'flex', 
+                      justifyContent: 'center', 
+                      alignItems: 'center', 
+                      background: 'var(--primary)', 
+                      color: 'white', 
+                      padding: '18px', 
+                      borderRadius: '16px', 
+                      fontWeight: '800', 
+                      textDecoration: 'none',
+                      boxShadow: 'var(--shadow-glow)'
+                    }}
+                  >
+                    Checkout Now
+                  </Link>
+                </div>
+              )}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* Mobile Drawer */}
       <AnimatePresence>

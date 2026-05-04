@@ -54,7 +54,7 @@ export default function AdminDashboard() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '15px' }}>
-        <h1 style={{ fontSize: '1.8rem' }}>Dashboard Overview</h1>
+        <h1 style={{ fontSize: '1.8rem', fontFamily: 'var(--font-heading)', color: 'var(--primary)' }}>Dashboard Overview</h1>
         <div style={{ display: 'flex', gap: '10px' }}>
           <button style={{ padding: '8px 16px', backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '8px', fontSize: '14px' }}>Export PDF</button>
           <button style={{ padding: '8px 16px', backgroundColor: 'var(--primary)', color: 'white', borderRadius: '8px', fontSize: '14px' }}>Last 30 Days</button>
@@ -63,7 +63,7 @@ export default function AdminDashboard() {
 
       {/* Stats Grid */}
       <div className="admin-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '20px' }}>
-        {stats.map((stat, i) > (
+        {stats.map((stat, i) => (
           <div key={i} className="stat-card" style={{ 
             backgroundColor: 'white', 
             padding: 'clamp(16px, 3vw, 24px)', 
@@ -123,7 +123,7 @@ export default function AdminDashboard() {
                     paddingAngle={5}
                     dataKey="value"
                   >
-                    {categoryData.map((entry, index) > (
+                    {categoryData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
@@ -132,7 +132,7 @@ export default function AdminDashboard() {
               </ResponsiveContainer>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {categoryData.map((cat, i) > (
+              {categoryData.map((cat, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}>
                   <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: COLORS[i] }}></div>
                   <span>{cat.name}</span>
