@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Search, Edit2, Trash2, Filter, X } from 'lucide-react';
+import { Plus, Search, Edit2, Trash2, X } from 'lucide-react';
+import OptimizedImage from '@/components/ui/OptimizedImage';
 
 const mockProducts = [
   { id: '1', name: 'Fresh Cabbage', category: 'Vegetables', weight: '1 KG', price: 130, stock: 45, status: 'Active', image: '/images/cabbage.png' },
@@ -59,74 +60,89 @@ export default function ProductManagement() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '15px', flexWrap: 'wrap' }}>
         <div>
-          <h1 style={{ fontSize: '1.8rem' }}>Product Management</h1>
-          <p style={{ color: '#6B7280', fontSize: '14px' }}>Manage your inventory, prices and product status.</p>
+          <h1 style={{ fontSize: '1.8rem', color: 'var(--primary)', fontWeight: '900' }}>Product Management</h1>
+          <p style={{ color: 'var(--text-muted)', fontSize: '14px', fontWeight: '500' }}>Manage your inventory, prices and product status.</p>
         </div>
-        <button className="btn-primary" style={{ borderRadius: '8px' }} onClick={() => setIsModalOpen(true)}>
+        <button 
+          style={{ 
+            background: 'var(--primary)', 
+            color: 'white', 
+            padding: '12px 24px', 
+            borderRadius: '12px', 
+            border: 'none', 
+            fontWeight: '700',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            cursor: 'pointer',
+            boxShadow: 'var(--shadow-glow)'
+          }}
+          onClick={() => setIsModalOpen(true)}
+        >
           <Plus size={18} />
-          <span>Add New Product</span>
+          <span className="btn-label">Add New Product</span>
         </button>
       </div>
 
-      <div style={{ backgroundColor: 'white', borderRadius: '16px', border: '1px solid #E5E7EB', overflow: 'hidden' }}>
-        <div style={{ padding: '20px', borderBottom: '1px solid #E5E7EB', display: 'flex', gap: '15px' }}>
+      <div style={{ backgroundColor: 'white', borderRadius: '24px', border: '1px solid rgba(0,0,0,0.05)', overflow: 'hidden', boxShadow: 'var(--shadow-glow)' }}>
+        <div style={{ padding: '20px', borderBottom: '1px solid rgba(0,0,0,0.05)', display: 'flex', gap: '15px' }}>
           <div style={{ flex: '1', position: 'relative' }}>
             <Search size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF' }} />
             <input 
               type="text" 
               placeholder="Search products..." 
-              style={{ width: '100%', padding: '10px 10px 10px 40px', border: '1px solid #E5E7EB', borderRadius: '8px', outline: 'none' }} 
+              style={{ width: '100%', padding: '12px 12px 12px 40px', border: '1px solid rgba(0,0,0,0.1)', borderRadius: '12px', outline: 'none', background: 'var(--bg-main)', fontWeight: '500' }} 
             />
           </div>
         </div>
 
         <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-            <thead style={{ backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E7EB' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '640px' }}>
+            <thead style={{ backgroundColor: 'var(--bg-soft)', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
               <tr>
-                <th style={{ padding: '16px 24px', fontWeight: '600', fontSize: '13px', color: '#374151' }}>PRODUCT NAME</th>
-                <th style={{ padding: '16px 24px', fontWeight: '600', fontSize: '13px', color: '#374151' }}>CATEGORY</th>
-                <th style={{ padding: '16px 24px', fontWeight: '600', fontSize: '13px', color: '#374151' }}>PRICE</th>
-                <th style={{ padding: '16px 24px', fontWeight: '600', fontSize: '13px', color: '#374151' }}>STOCK</th>
-                <th style={{ padding: '16px 24px', fontWeight: '600', fontSize: '13px', color: '#374151' }}>STATUS</th>
-                <th style={{ padding: '16px 24px', fontWeight: '600', fontSize: '13px', color: '#374151' }}>ACTIONS</th>
+                <th style={{ padding: '16px 24px', fontWeight: '800', fontSize: '12px', color: 'var(--primary)', textTransform: 'uppercase' }}>PRODUCT NAME</th>
+                <th style={{ padding: '16px 24px', fontWeight: '800', fontSize: '12px', color: 'var(--primary)', textTransform: 'uppercase' }}>CATEGORY</th>
+                <th style={{ padding: '16px 24px', fontWeight: '800', fontSize: '12px', color: 'var(--primary)', textTransform: 'uppercase' }}>PRICE</th>
+                <th style={{ padding: '16px 24px', fontWeight: '800', fontSize: '12px', color: 'var(--primary)', textTransform: 'uppercase' }}>STOCK</th>
+                <th style={{ padding: '16px 24px', fontWeight: '800', fontSize: '12px', color: 'var(--primary)', textTransform: 'uppercase' }}>STATUS</th>
+                <th style={{ padding: '16px 24px', fontWeight: '800', fontSize: '12px', color: 'var(--primary)', textTransform: 'uppercase' }}>ACTIONS</th>
               </tr>
             </thead>
             <tbody>
               {products.map((product) => (
-                <tr key={product.id} style={{ borderBottom: '1px solid #E5E7EB' }}>
+                <tr key={product.id} style={{ borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
                   <td style={{ padding: '16px 24px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <div style={{ width: '40px', height: '40px', borderRadius: '8px', backgroundColor: '#F3F4F6', overflow: 'hidden', display: 'flex', alignItems:'center', justifyContent:'center' }}>
-                         {product.image && <img src={product.image} alt={product.name} style={{ width: '100%', height:'100%', objectFit: 'contain' }} />}
+                      <div style={{ width: '45px', height: '45px', borderRadius: '12px', backgroundColor: 'var(--bg-soft)', overflow: 'hidden', display: 'flex', alignItems:'center', justifyContent:'center', position: 'relative', padding: '5px' }}>
+                         {product.image && <OptimizedImage src={product.image} alt={product.name} fill objectFit="contain" style={{ mixBlendMode: 'multiply' }} />}
                       </div>
                       <div>
-                        <p style={{ fontWeight: '600', fontSize: '14px' }}>{product.name}</p>
-                        <p style={{ fontSize: '12px', color: '#6B7280' }}>{product.weight}</p>
+                        <p style={{ fontWeight: '800', fontSize: '14px', color: 'var(--primary)' }}>{product.name}</p>
+                        <p style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: '600' }}>{product.weight}</p>
                       </div>
                     </div>
                   </td>
-                  <td style={{ padding: '16px 24px', fontSize: '14px' }}>{product.category}</td>
-                  <td style={{ padding: '16px 24px', fontWeight: '600', fontSize: '14px' }}>₹{product.price}</td>
-                  <td style={{ padding: '16px 24px', fontSize: '14px' }}>{product.stock} pcs</td>
+                  <td style={{ padding: '16px 24px', fontSize: '14px', fontWeight: '600', color: 'var(--text-main)' }}>{product.category}</td>
+                  <td style={{ padding: '16px 24px', fontWeight: '800', fontSize: '14px', color: 'var(--primary)' }}>₹{product.price}</td>
+                  <td style={{ padding: '16px 24px', fontSize: '14px', fontWeight: '600', color: 'var(--text-main)' }}>{product.stock} pcs</td>
                   <td style={{ padding: '16px 24px' }}>
                     <span style={{ 
-                      padding: '4px 12px', 
-                      borderRadius: '99px', 
+                      padding: '6px 14px', 
+                      borderRadius: '12px', 
                       fontSize: '12px', 
-                      fontWeight: '500',
-                      backgroundColor: product.status === 'Active' ? '#DEF7EC' : '#FDE8E8',
-                      color: product.status === 'Active' ? '#03543F' : '#9B1C1C'
+                      fontWeight: '800',
+                      backgroundColor: product.status === 'Active' ? '#D1FAE5' : '#FEE2E2',
+                      color: product.status === 'Active' ? '#065F46' : '#991B1B'
                     }}>
                       {product.status}
                     </span>
                   </td>
                   <td style={{ padding: '16px 24px' }}>
                     <div style={{ display: 'flex', gap: '10px' }}>
-                      <button className="action-icon"><Edit2 size={16} /></button>
-                      <button className="action-icon" style={{ color: '#EF4444' }} onClick={() => handleDelete(product.id)}><Trash2 size={16} /></button>
+                      <button style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'var(--bg-soft)', border: 'none', color: 'var(--primary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Edit2 size={16} /></button>
+                      <button style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#FEE2E2', border: 'none', color: '#EF4444', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={() => handleDelete(product.id)}><Trash2 size={16} /></button>
                     </div>
                   </td>
                 </tr>
@@ -137,58 +153,50 @@ export default function ProductManagement() {
       </div>
 
       {isModalOpen && (
-        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-          <div style={{ backgroundColor: 'white', padding: '30px', borderRadius: '16px', width: '400px', maxWidth: '90%' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-              <h2 style={{ fontSize: '1.4rem' }}>Add Product</h2>
-              <button onClick={() => setIsModalOpen(false)}><X size={20} /></button>
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(31, 61, 43, 0.4)', backdropFilter: 'blur(10px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2000 }}>
+          <motion.div 
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            style={{ backgroundColor: 'white', padding: '40px', borderRadius: '32px', width: 'min(90vw, 450px)', boxShadow: 'var(--shadow-glow)' }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: '900', color: 'var(--primary)' }}>Add Product</h2>
+              <button onClick={() => setIsModalOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--primary)' }}><X size={24} /></button>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-              <input type="text" placeholder="Product Name" className="modal-input" value={newProduct.name} onChange={e => setNewProduct({...newProduct, name: e.target.value})} />
-              <input type="text" placeholder="Category" className="modal-input" value={newProduct.category} onChange={e => setNewProduct({...newProduct, category: e.target.value})} />
-              <input type="text" placeholder="Weight/Quantity (e.g. 500gm)" className="modal-input" value={newProduct.weight} onChange={e => setNewProduct({...newProduct, weight: e.target.value})} />
-              <input type="number" placeholder="Price (₹)" className="modal-input" value={newProduct.price} onChange={e => setNewProduct({...newProduct, price: e.target.value})} />
-              <input type="number" placeholder="Stock" className="modal-input" value={newProduct.stock} onChange={e => setNewProduct({...newProduct, stock: e.target.value})} />
-              <select className="modal-input" value={newProduct.status} onChange={e => setNewProduct({...newProduct, status: e.target.value})}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <input type="text" placeholder="Product Name" style={modalInputStyle} value={newProduct.name} onChange={e => setNewProduct({...newProduct, name: e.target.value})} />
+              <input type="text" placeholder="Category" style={modalInputStyle} value={newProduct.category} onChange={e => setNewProduct({...newProduct, category: e.target.value})} />
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                <input type="text" placeholder="Weight/Qty" style={modalInputStyle} value={newProduct.weight} onChange={e => setNewProduct({...newProduct, weight: e.target.value})} />
+                <input type="number" placeholder="Price (₹)" style={modalInputStyle} value={newProduct.price} onChange={e => setNewProduct({...newProduct, price: e.target.value})} />
+              </div>
+              <input type="number" placeholder="Stock" style={modalInputStyle} value={newProduct.stock} onChange={e => setNewProduct({...newProduct, stock: e.target.value})} />
+              <select style={modalInputStyle} value={newProduct.status} onChange={e => setNewProduct({...newProduct, status: e.target.value})}>
                 <option value="Active">Active</option>
                 <option value="Inactive">Inactive</option>
               </select>
-              <input type="text" placeholder="Image URL (optional)" className="modal-input" value={newProduct.image} onChange={e => setNewProduct({...newProduct, image: e.target.value})} />
+              <input type="text" placeholder="Image URL (optional)" style={modalInputStyle} value={newProduct.image} onChange={e => setNewProduct({...newProduct, image: e.target.value})} />
               
               <button 
                 onClick={handleSaveProduct}
-                style={{ backgroundColor: '#16A34A', color: 'white', padding: '12px', borderRadius: '8px', border: 'none', fontWeight: '600', marginTop: '10px' }}>
+                style={{ background: 'var(--primary-gradient)', color: 'white', padding: '18px', borderRadius: '16px', border: 'none', fontWeight: '800', marginTop: '10px', cursor: 'pointer', boxShadow: 'var(--shadow-glow)' }}>
                 Save Product
               </button>
             </div>
-          </div>
+          </motion.div>
         </div>
       )}
-
-      <style jsx>{`
-        .action-icon {
-          width: 32px;
-          height: 32px;
-          border-radius: 6px;
-          border: 1px solid #E5E7EB;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #6B7280;
-          transition: var(--transition);
-        }
-        .action-icon:hover {
-          background-color: #F9FAFB;
-          border-color: #D1D5DB;
-        }
-        .modal-input {
-          width: 100%;
-          padding: 10px 14px;
-          border: 1px solid #E5E7EB;
-          border-radius: 8px;
-          outline: none;
-        }
-      `}</style>
     </div>
   );
 }
+
+const modalInputStyle: React.CSSProperties = {
+  width: '100%',
+  padding: '14px 18px',
+  border: '1px solid rgba(31, 61, 43, 0.1)',
+  borderRadius: '14px',
+  background: 'var(--bg-main)',
+  outline: 'none',
+  fontSize: '15px',
+  fontWeight: '600'
+};

@@ -1,179 +1,70 @@
 'use client';
 
-import React, { useRef } from 'react';
-import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import React from 'react';
 import ProductCard from '../ui/ProductCard';
 
-const PASTEL_COLORS = ['#FFE0C2', '#FFD6D6', '#D6F5DF', '#E8DEFF', '#FFF5CC', '#D6EEFF'];
-
-const products = [
-  { id: 10, name: 'Fresh Cabbage', image: '/images/cabbage.png', weight: 'green leaves, 1kg', price: '₹130' },
-  { id: 11, name: "Perry's Ice Cream", image: '/images/icecream.png', weight: 'vanilla, 1kg', price: '₹230', badge: 'New' },
-  { id: 12, name: 'Organic Potato', image: '/images/potato.png', weight: 'farm fresh, 1kg', price: '₹170' },
-  { id: 13, name: 'Fresh Bundle', image: '/images/bundle-big.png', weight: 'mixed veggies', price: '₹400', badge: 'Sale' },
-  { id: 14, name: 'Oreo Biscuit', image: '/images/oreo.png', weight: 'chocolate, 280gm', price: '₹200' },
-  { id: 15, name: 'Fresh Papaya', image: '/images/papaya.png', weight: 'tropical, 1kg', price: '₹100' },
+const PRODUCTS = [
+  { id: 1, name: 'Fresh Red Tomato', weight: '500g', price: 45, originalPrice: 60, image: '/images/tomato.png', rating: 4.8, bgColor: '#EAE3D2' },
+  { id: 2, name: 'Organic Cabbage', weight: '1kg', price: 35, originalPrice: 50, image: '/images/cabbage.png', rating: 4.5, bgColor: '#D8E2DC' },
+  { id: 3, name: 'Fresh Cauliflower', weight: '1pc', price: 40, originalPrice: 55, image: '/images/cauliflower.png', rating: 4.7, bgColor: '#E9EDC9' },
+  { id: 4, name: 'Red Chili', weight: '200g', price: 25, originalPrice: 35, image: '/images/chili.png', rating: 4.9, bgColor: '#F0EAD6' },
+  { id: 5, name: 'Purple Eggplant', weight: '500g', price: 30, originalPrice: 45, image: '/images/eggplant.png', rating: 4.4, bgColor: '#F5F1E8' },
+  { id: 6, name: 'Fresh Cucumber', weight: '1kg', price: 28, originalPrice: 40, image: '/images/cucumber.png', rating: 4.6, bgColor: '#EBE6D9' },
+  { id: 7, name: 'Red Bell Pepper', weight: '500g', price: 80, originalPrice: 100, image: '/images/pepper.png', rating: 4.8, bgColor: '#EAE3D2' },
+  { id: 8, name: 'Green Lettuce', weight: '250g', price: 45, originalPrice: 65, image: '/images/lettuce.png', rating: 4.7, bgColor: '#D8E2DC' },
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.1 } },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 40 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { type: 'spring' as const, stiffness: 300, damping: 25 },
-  },
-};
-
 export default function PopularProductsSection() {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [displayProducts, setDisplayProducts] = React.useState(products);
+  const [displayProducts, setDisplayProducts] = React.useState(PRODUCTS);
 
   React.useEffect(() => {
     const saved = localStorage.getItem('products_store');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        if (parsed && parsed.length > 0) {
-          const formatted = parsed.slice(0, 8).map((p: any) => ({
-            id: p.id || Math.random(),
-            name: p.name,
-            weight: p.weight,
-            price: `₹${p.price}`,
-            image: p.image || '/images/cabbage.png',
-            badge: p.status === 'Active' && Math.random() > 0.5 ? 'Sale' : undefined
-          }));
-          setDisplayProducts(formatted);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setDisplayProducts(parsed);
         }
       } catch (e) {
-        console.error("Failed to parse products from local storage");
+        console.error('Failed to load products', e);
       }
     }
   }, []);
 
-  const scroll = (dir: 'left' | 'right') =>
-    scrollRef.current?.scrollBy({
-      left: dir === 'left' ? -260 : 260,
-      behavior: 'smooth',
-    });
-
   return (
-    <section style={{ backgroundColor: '#FDF5EC', padding: '60px 0', overflow: 'hidden' }}>
+    <section id="products" className="section-padding">
       <div className="container">
-        {/* Header */}
-        <div
-          style={{
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '40px' }}>
+          <div style={{ maxWidth: '600px' }}>
+            <h2 style={{ 
+              fontSize: 'clamp(2rem, 5vw, 3rem)', 
+              fontWeight: '800', 
+              fontFamily: 'var(--font-heading)',
+              color: 'var(--primary)',
+              marginBottom: '15px' 
+            }}>Popular Products</h2>
+            <p style={{ color: 'var(--text-muted)', fontWeight: '500', fontSize: '1.1rem' }}>Our most loved fresh picks this week</p>
+          </div>
+          <button style={{ 
+            color: 'var(--primary)', 
+            fontWeight: '700', 
+            background: 'none', 
+            border: 'none', 
+            cursor: 'pointer',
+            fontSize: '16px',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: 40,
-          }}
-        >
-          <h2 style={{ fontSize: 28, fontWeight: 800, color: '#1A1A1A' }}>
-            Popular Products
-          </h2>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            {/* Arrows */}
-            <button
-              onClick={() => scroll('left')}
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: '50%',
-                background: '#fff',
-                border: '1px solid #E5E7EB',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                color: '#4B5563',
-                boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
-              }}
-            >
-              <ChevronLeft size={18} />
-            </button>
-            <button
-              onClick={() => scroll('right')}
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: '50%',
-                background: '#16A34A',
-                border: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                color: '#fff',
-                boxShadow: '0 4px 12px rgba(22,163,74,0.3)',
-              }}
-            >
-              <ChevronRight size={18} />
-            </button>
-            <button
-              style={{
-                color: '#16A34A',
-                fontWeight: 600,
-                padding: '8px 24px',
-                border: '2px solid #16A34A',
-                borderRadius: 50,
-                background: 'transparent',
-                cursor: 'pointer',
-                fontSize: 14,
-                marginLeft: 6,
-                transition: 'all 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = '#16A34A';
-                e.currentTarget.style.color = 'white';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'transparent';
-                e.currentTarget.style.color = '#16A34A';
-              }}
-            >
-              See All
-            </button>
-          </div>
+            gap: '8px'
+          }} className="hover-underline">
+            View All Products
+          </button>
         </div>
 
-        {/* Scrollable row */}
-        <motion.div
-          ref={scrollRef}
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: '-60px' }}
-          className="no-scrollbar"
-          style={{
-            display: 'flex',
-            gap: 20,
-            overflowX: 'auto',
-            paddingBottom: 16,
-            scrollSnapType: 'x mandatory',
-            WebkitOverflowScrolling: 'touch',
-            scrollbarWidth: 'none',
-            msOverflowStyle: 'none',
-          }}
-        >
-          {displayProducts.map((product: any, index: number) => (
-            <motion.div
-              key={product.id}
-              variants={itemVariants}
-              style={{ scrollSnapAlign: 'start', flexShrink: 0 }}
-            >
-              <ProductCard
-                {...product}
-                bgColor={PASTEL_COLORS[index % PASTEL_COLORS.length]}
-              />
-            </motion.div>
+        <div className="products-grid">
+          {displayProducts.map((product) => (
+            <ProductCard key={product.id} {...product} />
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

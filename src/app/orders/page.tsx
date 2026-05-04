@@ -1,152 +1,106 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { Package, Clock, CheckCircle2, ChevronRight, ArrowLeft } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import Navbar from '@/components/layout/Navbar';
-import Footer from '@/components/layout/Footer';
-
-const mockOrders = [
-  {
-    id: 'ORD-89234',
-    date: 'April 25, 2026',
-    status: 'Processing',
-    total: '₹450',
-    items: [
-      { name: 'Fresh Cabbage', qty: 1, image: '/images/cabbage.png' },
-      { name: 'Organic Potato', qty: 2, image: '/images/potato.png' },
-    ]
-  },
-  {
-    id: 'ORD-89102',
-    date: 'April 20, 2026',
-    status: 'Delivered',
-    total: '₹1230',
-    items: [
-      { name: 'Oreo Biscuit', qty: 3, image: '/images/oreo.png' },
-      { name: "Perry's Ice Cream", qty: 1, image: '/images/icecream.png' },
-      { name: 'Fresh Papaya', qty: 1, image: '/images/papaya.png' },
-    ]
-  },
-  {
-    id: 'ORD-88950',
-    date: 'April 15, 2026',
-    status: 'Delivered',
-    total: '₹85',
-    items: [
-      { name: 'Big Pack Bundle', qty: 1, image: '/images/bundle-big.png' },
-    ]
-  }
-];
+import { Package, ChevronRight, MapPin, Clock } from 'lucide-react';
+import Link from 'next/link';
+import OptimizedImage from '@/components/ui/OptimizedImage';
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<any[]>([]);
 
   useEffect(() => {
-    const localOrders = JSON.parse(localStorage.getItem('orders_store') || '[]');
-    setOrders([...localOrders, ...mockOrders]);
+    const savedOrders = JSON.parse(localStorage.getItem('orders_store') || '[]');
+    setOrders(savedOrders);
   }, []);
 
   return (
-    <div style={{ backgroundColor: '#FDF5EC', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <Navbar />
+    <main style={{ minHeight: '100vh', backgroundColor: 'var(--bg-main)', paddingTop: '120px', paddingBottom: '80px' }}>
+      <div className="container">
+        <div style={{ marginBottom: '40px' }}>
+          <h1 style={{ fontSize: '2.5rem', fontWeight: '900', color: 'var(--primary)', marginBottom: '10px' }}>My Orders</h1>
+          <p style={{ color: 'var(--text-muted)', fontWeight: '600' }}>Track and manage your organic deliveries</p>
+        </div>
 
-      <main style={{ flex: 1, padding: '40px 20px' }}>
-        <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
-          
-          <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '30px' }}>
-            <Link href="/" style={{ 
-              width: '40px', height: '40px', borderRadius: '50%', background: 'white', 
-              display: 'flex', alignItems: 'center', justifyContent: 'center', 
-              boxShadow: '0 4px 10px rgba(0,0,0,0.05)', color: '#4B5563' 
-            }}>
-              <ArrowLeft size={20} />
-            </Link>
-            <h1 style={{ fontSize: '28px', fontWeight: '800', color: '#1A1A1A', margin: 0 }}>My Orders</h1>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            {orders.map((order, index) => (
-              <motion.div
-                key={order.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                style={{
-                  background: 'white',
-                  borderRadius: '24px',
-                  padding: '24px',
-                  boxShadow: '0 8px 30px rgba(0,0,0,0.03)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '20px'
-                }}
-              >
-                {/* Order Header */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid #E5E7EB', paddingBottom: '20px' }}>
-                  <div>
-                    <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#1A1A1A', marginBottom: '4px' }}>{order.id}</h3>
-                    <p style={{ color: '#6B7280', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <Clock size={14} /> {order.date}
-                    </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
+          {orders.length > 0 ? orders.map((order) => (
+            <motion.div
+              key={order.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              style={{
+                background: 'white',
+                borderRadius: '30px',
+                padding: '30px',
+                boxShadow: 'var(--shadow-glow)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '25px'
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '20px' }}>
+                <div style={{ display: 'flex', gap: '20px' }}>
+                  <div style={{ width: '60px', height: '60px', borderRadius: '18px', background: 'var(--bg-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)' }}>
+                    <Package size={30} />
                   </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <p style={{ fontSize: '20px', fontWeight: '800', color: 'var(--primary)', margin: '0 0 6px 0' }}>{order.total}</p>
-                    <span style={{ 
-                      padding: '6px 12px', 
-                      borderRadius: '50px', 
-                      fontSize: '12px', 
-                      fontWeight: '700',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      backgroundColor: order.status === 'Delivered' ? '#DEF7EC' : '#FEF3C7',
-                      color: order.status === 'Delivered' ? '#03543F' : '#92400E'
-                    }}>
-                      {order.status === 'Delivered' ? <CheckCircle2 size={14} /> : <Package size={14} />}
-                      {order.status}
-                    </span>
+                  <div>
+                    <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--primary)' }}>{order.id}</h3>
+                    <div style={{ display: 'flex', gap: '15px', marginTop: '5px' }}>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '14px', color: 'var(--text-muted)', fontWeight: '600' }}>
+                        <Clock size={16} /> {order.date}
+                      </span>
+                      <span style={{ 
+                        padding: '4px 12px', 
+                        borderRadius: '50px', 
+                        background: '#FEF3C7', 
+                        color: '#D97706', 
+                        fontSize: '12px', 
+                        fontWeight: '800' 
+                      }}>
+                        {order.status}
+                      </span>
+                    </div>
                   </div>
                 </div>
-
-                {/* Items */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                    {order.items.map((item: any, i: number) => (
-                      <div key={i} style={{ 
-                        width: '60px', height: '60px', borderRadius: '12px', background: '#F3F4F6', 
-                        padding: '6px', position: 'relative' 
-                      }}>
-                        <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'contain', mixBlendMode: 'multiply' }} />
-                        <span style={{ 
-                          position: 'absolute', top: '-6px', right: '-6px', 
-                          background: '#1A1A1A', color: 'white', fontSize: '10px', 
-                          width: '18px', height: '18px', borderRadius: '50%', 
-                          display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' 
-                        }}>
-                          {item.qty}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  <button style={{ 
-                    display: 'flex', alignItems: 'center', gap: '6px', 
-                    background: 'transparent', border: 'none', color: 'var(--primary)', 
-                    fontWeight: '600', cursor: 'pointer', fontSize: '14px' 
-                  }}>
-                    View Details <ChevronRight size={16} />
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontSize: '1.5rem', fontWeight: '900', color: 'var(--primary)' }}>{order.total}</div>
+                  <button style={{ background: 'none', border: 'none', color: 'var(--secondary)', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px', marginTop: '10px' }}>
+                    View Details <ChevronRight size={18} />
                   </button>
                 </div>
-              </motion.div>
-            ))}
-          </div>
+              </div>
 
+              <div style={{ display: 'flex', gap: '15px', overflowX: 'auto', paddingBottom: '10px' }} className="hide-scrollbar">
+                {order.items.map((item: any, idx: number) => (
+                  <div key={idx} style={{ flex: '0 0 auto', width: '80px', height: '80px', background: 'var(--bg-soft)', borderRadius: '15px', padding: '10px' }}>
+                    <OptimizedImage src={item.image} alt={item.name} width={60} height={60} objectFit="contain" />
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )) : (
+            <div style={{ textAlign: 'center', padding: '100px 0' }}>
+              <div style={{ width: '120px', height: '120px', background: 'white', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 30px', color: 'var(--primary)', boxShadow: 'var(--shadow-glow)' }}>
+                <ShoppingBag size={60} />
+              </div>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '15px' }}>No orders yet</h2>
+              <Link href="/" style={{ padding: '15px 40px', background: 'var(--primary)', color: 'white', borderRadius: '15px', fontWeight: '800', textDecoration: 'none', display: 'inline-block' }}>
+                Start Shopping
+              </Link>
+            </div>
+          )}
         </div>
-      </main>
+      </div>
+    </main>
+  );
+}
 
-      <Footer />
-    </div>
+function ShoppingBag({ size }: { size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <path d="M16 10a4 4 0 0 1-8 0"></path>
+    </svg>
   );
 }

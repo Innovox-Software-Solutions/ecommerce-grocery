@@ -38,6 +38,21 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#F9FAFB' }}>
+      {/* Sidebar Backdrop for Mobile */}
+      {isSidebarOpen && (
+        <div 
+          className="sidebar-backdrop"
+          onClick={() => setIsSidebarOpen(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            zIndex: 999,
+            display: 'none' // Controlled by CSS media query
+          }}
+        />
+      )}
+
       {/* Sidebar */}
       <aside className={`admin-sidebar ${!isSidebarOpen ? 'closed' : ''}`} style={{ 
         width: '260px', 
@@ -57,7 +72,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
 
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {menuItems.map((item) => (
+          {menuItems.map((item) > (
             <Link 
               key={item.path} 
               href={item.path}
@@ -96,7 +111,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
       {/* Main Content */}
-      <main style={{ 
+      <main className="admin-main-content" style={{ 
         flex: '1', 
         marginLeft: isSidebarOpen ? '260px' : '0',
         transition: 'var(--transition)',
@@ -110,7 +125,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '0 30px',
+          padding: '0 clamp(16px, 3vw, 30px)',
           position: 'sticky',
           top: '0',
           zIndex: '99'
@@ -128,7 +143,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
         </header>
 
-        <div style={{ padding: '30px' }}>
+        <div style={{ padding: 'clamp(16px, 3vw, 30px)' }}>
           {children}
         </div>
       </main>
@@ -142,8 +157,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           color: white;
         }
         @media (max-width: 768px) {
+          .sidebar-backdrop {
+            display: block !important;
+          }
           aside {
             transform: ${isSidebarOpen ? 'translateX(0)' : 'translateX(-100%)'};
+            width: min(90vw, 280px) !important;
           }
           main {
             margin-left: 0 !important;

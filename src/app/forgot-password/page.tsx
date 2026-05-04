@@ -1,121 +1,89 @@
 'use client';
 
-import React from 'react';
-import Link from 'next/link';
-import { Mail, ArrowLeft } from 'lucide-react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Mail, ArrowRight, ChevronLeft } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function ForgotPasswordPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+
+  const handleReset = (e: React.FormEvent) => {
+    e.preventDefault();
+    router.push('/verify-otp');
+  };
+
+  const inputStyle: React.CSSProperties = {
+    width: '100%',
+    padding: '18px 20px 18px 55px',
+    borderRadius: '18px',
+    border: '1px solid rgba(31, 61, 43, 0.1)',
+    background: 'var(--bg-main)',
+    fontSize: '16px',
+    fontWeight: '600',
+    outline: 'none',
+    transition: '0.3s'
+  };
+
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: '#FDF5EC',
-      padding: '24px'
-    }}>
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ type: "spring", stiffness: 300, damping: 25 }}
-        className="glass-panel"
+    <main style={{ minHeight: '100vh', backgroundColor: 'var(--bg-main)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
         style={{
           width: '100%',
-          maxWidth: '440px',
-          padding: '40px',
+          maxWidth: '500px',
+          background: 'white',
+          padding: '50px',
           borderRadius: '40px',
-          backgroundColor: 'rgba(255, 255, 255, 0.7)',
-          boxShadow: '0 20px 40px rgba(0,0,0,0.05)',
+          boxShadow: 'var(--shadow-glow)',
           textAlign: 'center'
         }}
       >
-        <div style={{ 
-          width: '64px', 
-          height: '64px', 
-          background: '#F0FDF4', 
-          borderRadius: '50%', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center',
-          margin: '0 auto 24px',
-          color: '#16A34A'
-        }}>
-          <Mail size={32} />
+        <Link href="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: 'var(--primary)', fontWeight: '700', textDecoration: 'none', marginBottom: '30px' }}>
+          <ChevronLeft size={18} /> Back to Sign In
+        </Link>
+
+        <div style={{ marginBottom: '40px' }}>
+          <h1 style={{ fontSize: '2.2rem', fontWeight: '900', color: 'var(--primary)', marginBottom: '10px' }}>Forgot Password?</h1>
+          <p style={{ color: 'var(--text-muted)', fontWeight: '600' }}>No worries! Enter your email to reset it.</p>
         </div>
 
-        <h1 style={{ fontSize: '24px', color: '#1A1A1A', marginBottom: '12px' }}>Forgot Password? 🔑</h1>
-        <p style={{ color: '#6B7280', fontSize: '14px', marginBottom: '30px', lineHeight: '1.6' }}>
-          Enter your email address and we'll send you a link to reset your password.
-        </p>
-
-        <form style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <form onSubmit={handleReset} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           <div style={{ position: 'relative' }}>
-            <Mail size={20} color="#9CA3AF" style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)' }} />
+            <Mail size={22} style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)' }} />
             <input 
               type="email" 
-              placeholder="Email address" 
-              required
-              className="input-field"
+              placeholder="Email Address" 
+              required 
+              style={inputStyle}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
-          <button 
-            type="button"
-            style={{
-              padding: '16px',
-              borderRadius: '50px',
-              border: 'none',
-              background: '#16A34A',
-              color: 'white',
-              fontWeight: 'bold',
-              fontSize: '16px',
-              cursor: 'pointer',
-              boxShadow: '0 8px 20px rgba(22, 163, 74, 0.3)',
-              transition: 'all 0.3s ease'
-            }}
-            onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
-            onMouseOut={(e) => e.currentTarget.style.transform = 'none'}
-          >
-            Send Reset Link
+          <button type="submit" style={{ 
+            padding: '20px',
+            background: 'var(--primary-gradient)',
+            color: 'white',
+            borderRadius: '18px',
+            border: 'none',
+            fontSize: '1.1rem',
+            fontWeight: '800',
+            cursor: 'pointer',
+            boxShadow: 'var(--shadow-glow)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '10px',
+            marginTop: '10px'
+          }}>
+            Send Reset Code <ArrowRight size={20} />
           </button>
         </form>
-
-        <div style={{ marginTop: '30px' }}>
-          <Link href="/login" style={{ 
-            display: 'inline-flex', 
-            alignItems: 'center', 
-            gap: '8px', 
-            color: '#6B7280', 
-            fontSize: '14px',
-            fontWeight: '500',
-            transition: 'color 0.3s'
-          }}
-          onMouseOver={(e) => e.currentTarget.style.color = '#1A1A1A'}
-          onMouseOut={(e) => e.currentTarget.style.color = '#6B7280'}
-          >
-            <ArrowLeft size={16} />
-            Back to Login
-          </Link>
-        </div>
       </motion.div>
-
-      <style jsx>{`
-        .input-field {
-          width: 100%;
-          padding: 16px 16px 16px 48px;
-          border-radius: 50px;
-          border: 1px solid rgba(0,0,0,0.1);
-          background: white;
-          outline: none;
-          font-size: 15px;
-          transition: all 0.3s ease;
-        }
-        .input-field:focus {
-          border-color: #16A34A;
-          box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.1);
-        }
-      `}</style>
-    </div>
+    </main>
   );
 }

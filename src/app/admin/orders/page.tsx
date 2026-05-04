@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Search, Filter, Eye, Download } from 'lucide-react';
+import { Search, Eye, Download } from 'lucide-react';
 
 const mockOrders = [
   { id: 'ORD-7234', customer: 'James Bond', date: '2026-04-25', total: 120, items: 5, status: 'Delivered' },
@@ -13,11 +13,11 @@ const mockOrders = [
 export default function OrderManagement() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '15px', flexWrap: 'wrap' }}>
         <h1 style={{ fontSize: '1.8rem' }}>Order Management</h1>
-        <button style={{ padding: '8px 16px', backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <button className="export-btn" style={{ padding: '8px 16px', backgroundColor: 'white', border: '1px solid #E5E7EB', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Download size={18} />
-          <span>Export CSV</span>
+          <span className="btn-label">Export CSV</span>
         </button>
       </div>
 
@@ -29,8 +29,8 @@ export default function OrderManagement() {
           </div>
         </div>
 
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+        <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '700px' }}>
             <thead style={{ backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E7EB' }}>
               <tr>
                 <th style={{ padding: '16px 24px', fontWeight: '600', fontSize: '13px' }}>ORDER ID</th>
@@ -68,6 +68,19 @@ export default function OrderManagement() {
           </table>
         </div>
       </div>
+      <style jsx>{`
+        @media (max-width: 480px) {
+          .btn-label {
+            display: none;
+          }
+          .export-btn {
+            padding: 10px !important;
+            width: 44px;
+            height: 44px;
+            justify-content: center;
+          }
+        }
+      `}</style>
     </div>
   );
 }
